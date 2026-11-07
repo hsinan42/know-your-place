@@ -399,7 +399,7 @@ tfoot td { background: var(--soft); font-weight: 800; }
   .main { margin-left: 0; }
   .content { padding: 10px 16px calc(82px + env(safe-area-inset-bottom)); }
   .topbar { height: 66px; padding: 0 16px; gap: 9px; background: var(--canvas); }
-  .topbar .brand { font-size: 1.16rem; font-weight: 800; line-height: 1.12; padding: 0; gap: 5px; text-align: left; margin-right: auto; min-width: 0; }
+  .topbar .brand { font-size: 1.16rem; font-weight: 800; line-height: 1.12; padding: 0; gap: 5px; text-align: left; margin-right: auto; min-width: 0; white-space: normal; }
   .topbar .brand small { font-size: .67rem; font-weight: 600; white-space: normal; }
   .topbar .brand img { width: 28px; height: 28px; }
   .header-actions { gap: 3px; margin-left: 0; }
