@@ -1,0 +1,40 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+
+# Local configuration and keys
+.env
+.env.*
+*.env
+!.env.example
+.ssh/
+id_rsa
+id_ed25519
+id_ecdsa
+id_dsa
+*.key
+*.pem
+*.p12
+*.pfx
+deployment-access.txt
+
+# Personal finance data and backups
+private/
+data/
+backups/
+*.db*
+*.sqlite*
+*.dump
+gider-hesap-????-??-??.json
+know-your-place-????-??-??.json
+sheets-????-??-??.json
+hucre-envanteri.json
+docs/screenshots/
+
+# Local tooling
+.nuget/
+.dotnet/
+.pnpm-store/
+**/*.tsbuildinfo
+**/test-results/

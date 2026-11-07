@@ -1,0 +1,10 @@
+export type Entity={id:string;[key:string]:string|number|boolean|null};
+export type Settings={salary:number;savingsTarget:number;trackingStart:string};
+export type State={settings:Settings;categories:Entity[];cards:Entity[];expenses:Entity[];incomes:Entity[];subscriptions:Entity[];installments:Entity[];payments:Entity[];cashPayments?:Entity[];salaryPeriods?:{start:string;amount:number}[]};
+export type Collection=Exclude<keyof State,'settings'|'salaryPeriods'>;
+export type Month={month:number;salaryPlan:number;earnedIncome:number;borrowing:number;daily:number;subscriptions:number;installments:number;expense:number;net:number;forecastExpense:number;forecastNet:number;savingsTarget:number;budget:number;budgetRemaining:number;savingsRate:number|null;tracked:boolean;salaryReceived:number;openingBalance:number;closingBalance:number;cashIncome:number;cashOutflow:number;planOpeningBalance:number;planClosingBalance:number};
+export type Statement={cardId:string;name:string;closingDate:string;dueDate:string;total:number;paid:boolean;items:{name:string;kind:string;date:string;amount:number}[]};
+export type StatementPayment=Pick<Statement,'cardId'|'name'|'closingDate'|'dueDate'|'total'>;
+export type CashDue={sourceId:string;name:string;kind:string;date:string;amount:number};
+export type PaymentAgenda={asOf:string;through:string;statements:StatementPayment[];cashDues:CashDue[]};
+export type Report={months:Month[];statements:Statement[];upcomingPayments?:PaymentAgenda;installments:{id:string;paid:number;remaining:number;debt:number;nextDue?:{date:string;amount:number}|null;total?:number}[];assets:{asOf:string;balance:number;cardDebt:number;yearEndPlan:number;hasEstimatedPayments:boolean;unpaidCashDues:CashDue[]}};

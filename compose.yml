@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:18-bookworm
+    environment:
+      POSTGRES_DB: finance
+      POSTGRES_USER: finance
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD gerekli}
+    volumes: [finance-postgres:/var/lib/postgresql]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U finance -d finance"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD gerekli}
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Finance: "Host=db;Database=finance;Username=finance;Password=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD gerekli}"
+      SQLITE_IMPORT_PATH: ${SQLITE_IMPORT_PATH:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes: [finance-data:/data]
+    restart: unless-stopped
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports: ["127.0.0.1:8080:80"]
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  finance-data:
+  finance-postgres:
