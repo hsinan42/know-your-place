@@ -50,4 +50,4 @@ cd frontend && pnpm build
 - [Linux + HTTPS + yedekleme](docs/deployment.md)
 - [Geliştirme talimatları](AGENTS.md)
 
-PWA yükleme düğmesi destekleyen tarayıcılarda çalışır. iOS Safari için uygulama içinde Ana Ekrana Ekle açıklaması bulunur. Üretimde alan adı ve HTTPS gerekir. İnternet bağlantısı veri işlemleri için gereklidir.
+Ayarlar’daki **Ana ekrana ekle** düğmesi, destekleyen tarayıcılarda yükleme istemini açar. iPhone ve iPad’de Safari’nin **Paylaş → Ana Ekrana Ekle** adımlarını gösterir. Üretimde PWA kurulumu HTTPS gerektirir. İnternet bağlantısı veri işlemleri için gereklidir.

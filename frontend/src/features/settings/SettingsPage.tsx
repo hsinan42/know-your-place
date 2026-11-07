@@ -5,6 +5,7 @@ import { money } from '../../lib/format';
 import type { State } from '../../types';
 import { ProfileEditor } from '../auth/ProfileEditor';
 import { useSession } from '../auth/session';
+import { InstallApp } from './InstallApp';
 
 type Props = {
   state: State;
@@ -12,11 +13,10 @@ type Props = {
   onEdit: () => void;
   onImport: (file: File) => void;
   onExport: () => void;
-  onInstall: () => void;
   onLogout: () => void;
 };
 
-export function SettingsPage({ state, busy, onEdit, onImport, onExport, onInstall, onLogout }: Props) {
+export function SettingsPage({ state, busy, onEdit, onImport, onExport, onLogout }: Props) {
   const file = useRef<HTMLInputElement>(null);
   const { account } = useSession();
 
@@ -49,7 +49,7 @@ export function SettingsPage({ state, busy, onEdit, onImport, onExport, onInstal
         if (selected) onImport(selected);
         event.target.value = '';
       }}/>
-      <Button variant="ghost" onClick={onInstall}><Download size={17}/> Telefona yükleme seçenekleri</Button>
+      <InstallApp/>
     </section>
   </div>;
 }

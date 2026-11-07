@@ -20,8 +20,6 @@ import { SettingsPage } from './features/settings/SettingsPage';
 import { OnboardingTour } from './features/tour/OnboardingTour';
 import { tourSteps } from './features/tour/steps';
 
-type InstallEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: string }> };
-
 export default function FinanceWorkspace() {
  const { account, request, signOut } = useSession();
  const [state, setState] = useState<State | null>(null);
@@ -31,8 +29,6 @@ export default function FinanceWorkspace() {
  const [busy, setBusy] = useState(false);
  const [sidebar, setSidebar] = useState(false);
  const [edit, setEdit] = useState<RecordDraft | null>(null);
- const [install, setInstall] = useState<InstallEvent | null>(null);
- const [installHelp, setInstallHelp] = useState(false);
  const [year, setYear] = useState(Number(today().slice(0, 4)));
  const [month, setMonth] = useState(Number(today().slice(5, 7)));
  const etag = useRef('');
@@ -70,15 +66,6 @@ export default function FinanceWorkspace() {
    void load();
    return () => abort.abort();
  }, [request]);
-
- useEffect(() => {
-   function handleInstall(event: Event) {
-     event.preventDefault();
-     setInstall(event as InstallEvent);
-   }
-   window.addEventListener('beforeinstallprompt', handleInstall);
-   return () => window.removeEventListener('beforeinstallprompt', handleInstall);
- }, []);
 
  useEffect(() => {
    if (!state) return;
@@ -163,16 +150,6 @@ export default function FinanceWorkspace() {
 
  async function deleteRecord(collection: Collection, id: string) {
    await save(snapshot => ({ ...snapshot, [collection]: (snapshot[collection] ?? []).filter(item => item.id !== id) }));
- }
-
- async function installApp() {
-   if (!window.isSecureContext || !install) {
-     setInstallHelp(true);
-     return;
-   }
-   await install.prompt();
-   await install.userChoice;
-   setInstall(null);
  }
 
  if (!state) return <div className="loading">
@@ -272,12 +249,12 @@ export default function FinanceWorkspace() {
    state={state} report={report} add={add} openEditor={openEditor} remove={remove}/>}
  {page === 'reports' && report && <MonthlyReports report={report} year={year} month={month}/>}
  {page === 'settings' && <SettingsPage state={state} busy={busy} onEdit={() => add('settings')}
-   onImport={importData} onExport={exportData} onInstall={installApp} onLogout={logout}/>}
+   onImport={importData} onExport={exportData} onLogout={logout}/>}
  </AppShell>
  {tourIndex !== null && <OnboardingTour index={tourIndex} page={page}
    onAdvance={advanceTour} onClose={() => setTourIndex(null)}/>}
  <Dialog open={sidebar} onOpenChange={setSidebar} title="Menü"><Navigation page={page} onNavigate={navigate}/></Dialog>
  {edit && <RecordEditor key={edit.value.id} draft={edit} state={state} busy={busy} error={error}
    onClose={() => { setEdit(null); setError(''); }} onSubmit={submit}/>}
- <Dialog open={installHelp} onOpenChange={setInstallHelp} title="Telefonuna ekle"><p>HTTP üzerinden standart PWA yüklemesi kullanılamaz. Kurulum için HTTPS gerekir. HTTPS kullanırken iPhone / iPad: Safari’de Paylaş → Ana Ekrana Ekle.</p><p className="mt-4">Android: Chrome menüsünde Uygulamayı yükle veya Ana ekrana ekle seçeneğini kullan. Seçenek görünmüyorsa HTTPS bağlantısını kontrol et.</p><p className="info-note">İnternet bağlantısı kayıtları okumak ve kaydetmek için gereklidir. Çevrimdışıyken yeni finansal veri kaydedilmez.</p></Dialog></>
+ </>
 }
